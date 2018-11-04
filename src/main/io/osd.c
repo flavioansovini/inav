@@ -1771,8 +1771,21 @@ static bool osdDrawSingleElement(uint8_t item)
 
     case OSD_VARIO_NUM:
         {
+			#define FIRdepth 10
+			uint8_t i;
+			float FIRout;
+			static int16_t FIRbuffer[FIRdepth];
             int16_t value = getEstimatedActualVelocity(Z);
             char sym;
+			
+			for(i=0;i<FIRdepth-2;i++)
+			{
+				FIRbuffer[i] = FIRbuffer[i+1];
+				FIRout = FIRout + FIRbuffer[i];
+			}
+			FIRout = (FIRout + value)/FIRdepth;
+			value = (int16_t)FIRout;
+			
             switch ((osd_unit_e)osdConfig()->units) {
                 case OSD_UNIT_IMPERIAL:
                     // Convert to centifeet/s
