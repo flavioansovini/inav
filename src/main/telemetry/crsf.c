@@ -154,7 +154,7 @@ void crsfFrameGps(sbuf_t *dst)
     crsfSerialize32(dst, gpsSol.llh.lon);
     crsfSerialize16(dst, (gpsSol.groundSpeed * 36 + 50) / 100); // gpsSol.groundSpeed is in cm/s
     crsfSerialize16(dst, DECIDEGREES_TO_CENTIDEGREES(gpsSol.groundCourse)); // gpsSol.groundCourse is 0.1 degrees, need 0.01 deg
-    const uint16_t altitude = (getEstimatedActualPosition(Z) / 100) + 1000;
+    const uint16_t altitude = (getEstimatedActualPosition(Z) / 10) + 1000;//   / 100) + 1000 , multiplied by 10 for vario
     crsfSerialize16(dst, altitude);
     crsfSerialize8(dst, gpsSol.numSat);
 }
